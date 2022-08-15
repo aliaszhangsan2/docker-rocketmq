@@ -38,19 +38,22 @@ services:
         aliases:
           - rmqbroker
 
-  rmqconsole:
-    image: styletang/rocketmq-console-ng
-    container_name: rmqconsole
+  rmqdashboard:
+    image: apacherocketmq/rocketmq-dashboard
+    container_name: rmqdashboard
+    volumes:
+      - ./dashboard:/tmp/rocketmq-console/data
     ports:
-      - 8180:8080
+      - 8080:8080
     environment:
-        JAVA_OPTS: "-Drocketmq.namesrv.addr=rmqnamesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+        JAVA_OPTS: "-Drocketmq.namesrv.addr=rmqnamesrv:9876 -Drocketmq.config.isVIPChannel=false -Drocketmq.config.loginRequired=true -Dadmin=admin1@aadmin1@a,1"
     depends_on:
       - rmqnamesrv
     networks:
       rmq:
         aliases:
-          - rmqconsole
+          - rmqdashboard
+
 
 networks:
   rmq:
